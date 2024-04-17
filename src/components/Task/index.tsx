@@ -7,9 +7,10 @@ import { styles } from "./styles";
 
 type Props = {
   task: string
+  onRemove: () => void
 }
 
-export function Task({ task }: Props) {
+export function Task({ task, onRemove }: Props) {
   const [checked, setChecked] = useState(false);
 
   return (
@@ -17,7 +18,7 @@ export function Task({ task }: Props) {
       <Checkbox
         status={checked ? 'checked' : 'unchecked'}
         onPress={() => {
-          setChecked(!checked);
+          setChecked(!checked)
         }}
         uncheckedColor="#4EA8DE"
         color="#5E60CE"
@@ -26,11 +27,11 @@ export function Task({ task }: Props) {
 
       <Text style={styles.task}>{task}</Text>
       
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onRemove}>
         <AntDesign
           name="delete"
           size={22}
-          color="#808080"
+          color="#808080"        
         />
       </TouchableOpacity>
     </View>

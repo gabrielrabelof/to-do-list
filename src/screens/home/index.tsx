@@ -1,4 +1,5 @@
-import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Alert, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -6,17 +7,34 @@ import { styles } from "./styles";
 import { Task } from "../../components/Task";
 
 export function Home() {
-  const tasks = 
-  [
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.", 
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.", 
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit."
-  ]
+  const [tasks, setTasks] = useState<string[]>([])
+  const [text, setText] = useState("")
+
+  function handleAddTask() {
+    if (text == "") {
+      return Alert.alert("Empty task", "Enter text to register a task.")
+    }
+
+    if (tasks.includes(text)) {
+      return Alert.alert("Repeated task", "This task has already been registered.")
+    }
+
+    setTasks(prevState => [...prevState, text])
+    setText("")
+  }
+
+  function handleRemoveTask(str: string) {
+    Alert.alert("Remove task", "Are you sure you want to remove this task?", [
+      {
+        text: 'Yes',
+        onPress: () => setTasks(tasks.filter(task => task !== str))
+      },
+      {
+        text: 'No',
+        style: 'cancel'
+      }
+    ])
+  }
 
   return (
     <>
@@ -42,11 +60,14 @@ export function Home() {
             style={styles.input}
             placeholder="Add a new task"
             placeholderTextColor="#808080"
+            onChangeText={setText}
+            value={text}
           />
 
           <TouchableOpacity 
             style={styles.addButton} 
             activeOpacity={0.8}
+            onPress={handleAddTask}
           >
             <MaterialCommunityIcons 
               name="plus-circle-outline"
@@ -72,11 +93,13 @@ export function Home() {
           data={tasks}
           keyExtractor={item => item}
           renderItem={({item}) => (
-            <Task task={item}/>
+            <Task 
+              task={item}
+              onRemove={() => handleRemoveTask(item)}  
+            />
           )}
           showsVerticalScrollIndicator={false}
         />
-
       </View>
     </>
   )
