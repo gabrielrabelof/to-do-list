@@ -1,4 +1,4 @@
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -6,6 +6,18 @@ import { styles } from "./styles";
 import { Task } from "../../components/Task";
 
 export function Home() {
+  const tasks = 
+  [
+    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.", 
+    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.", 
+    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+    "Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+  ]
+
   return (
     <>
       <View style={styles.container}>
@@ -56,8 +68,15 @@ export function Home() {
           </View>
         </View>
 
-        <Task/>
-        <Task/>
+        <FlatList
+          data={tasks}
+          keyExtractor={item => item}
+          renderItem={({item}) => (
+            <Task task={item}/>
+          )}
+          showsVerticalScrollIndicator={false}
+        />
+
       </View>
     </>
   )

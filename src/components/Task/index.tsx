@@ -5,7 +5,11 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import { styles } from "./styles";
 
-export function Task() {
+type Props = {
+  task: string
+}
+
+export function Task({ task }: Props) {
   const [checked, setChecked] = useState(false);
 
   return (
@@ -20,7 +24,7 @@ export function Task() {
       />
 
 
-      <Text style={styles.task}>Lorem ipsum dolor sit amet consectetur adipisicing elit.</Text>
+      <Text style={styles.task}>{task}</Text>
       
       <TouchableOpacity>
         <AntDesign
