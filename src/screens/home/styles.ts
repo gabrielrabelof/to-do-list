@@ -43,6 +43,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#262626',
     marginRight: 6,
     paddingLeft: 16,
+    paddingRight: 12,
     fontSize: 16,
     color: '#F2F2F2',
     borderWidth: 0.8,
@@ -88,5 +89,26 @@ export const styles = StyleSheet.create({
     backgroundColor: '#333333',
     fontFamily: 'Inter_700Bold',
     fontSize: 14
+  },
+  emptyList: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#333333'
+  },
+  emptyListIcon: {
+    color: '#333333',
+    fontSize: 64,
+    marginTop: 48,
+    marginBottom: 16
+  },
+  emptyListText: {
+    fontSize: 16,
+    color: '#808080',
+    fontFamily: 'Inter_700Bold'
+  },
+  emptyListSubscription: {
+    color: '#808080',
+    fontFamily: 'Inter_400Regular'
   }
 })
