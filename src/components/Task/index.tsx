@@ -5,7 +5,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import { styles } from "./styles";
 
-export function Task() {
+type Props = {
+  task: string
+  onRemove: () => void
+}
+
+export function Task({ task, onRemove }: Props) {
   const [checked, setChecked] = useState(false);
 
   return (
@@ -13,20 +18,20 @@ export function Task() {
       <Checkbox
         status={checked ? 'checked' : 'unchecked'}
         onPress={() => {
-          setChecked(!checked);
+          setChecked(!checked)
         }}
         uncheckedColor="#4EA8DE"
         color="#5E60CE"
       />
 
 
-      <Text style={styles.task}>Lorem ipsum dolor sit amet consectetur adipisicing elit.</Text>
+      <Text style={styles.task}>{task}</Text>
       
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onRemove}>
         <AntDesign
           name="delete"
           size={22}
-          color="#808080"
+          color="#808080"        
         />
       </TouchableOpacity>
     </View>
