@@ -1,15 +1,19 @@
-import { useState } from "react";
-import { Alert, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useState } from "react"
+import { Alert, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { LinearGradient } from 'expo-linear-gradient'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-import { styles } from "./styles";
-import { Task } from "../../components/Task";
+import { styles } from "./styles"
+import { Task } from "../../components/Task"
 
 export function Home() {
   const [tasks, setTasks] = useState<string[]>([])
+  const [taskStates, setTaskStates] = useState<{ [key: string]: boolean }>({})
   const [text, setText] = useState("")
   const [isFocused, setIsFocused] = useState(false)
+  const [checkedCount, setCheckedCount] = useState(0)
+
+  let createdCount = tasks.length
 
   function handleFocus() {
     setIsFocused(true)
@@ -20,7 +24,7 @@ export function Home() {
   }
 
   function handleAddTask() {
-    if (text == "") {
+    if (text === "") {
       return Alert.alert("Empty task", "Enter text to register a task.")
     }
 
@@ -36,13 +40,32 @@ export function Home() {
     Alert.alert("Remove task", "Are you sure you want to remove this task?", [
       {
         text: 'Yes',
-        onPress: () => setTasks(tasks.filter(task => task !== str))
+        onPress: () => {setTasks(tasks.filter(task => task != str))
+          if (taskStates[str]) {
+            setCheckedCount(prevCount => prevCount - 1)
+          }
+        }
       },
       {
         text: 'No',
         style: 'cancel'
       }
     ])
+  }
+
+  function handleCheckTask(str: string, isChecked: boolean) {
+    const isTaskChecked = taskStates[str]
+  
+    const updatedTaskStates = { ...taskStates, [str]: isChecked }
+    setTaskStates(updatedTaskStates)
+  
+    const updatedTasks = isChecked
+      ? tasks.filter(task => task !== str).concat(str) 
+      : [str].concat(tasks.filter(task => task !== str)) 
+  
+    setTasks(updatedTasks)
+  
+    setCheckedCount(prevCount => isTaskChecked !== isChecked ? prevCount + (isChecked ? 1 : -1) : prevCount)
   }
 
   return (
@@ -91,25 +114,37 @@ export function Home() {
         <View style={styles.taskHeader}>
           <View style={styles.status}>
             <Text style={styles.statusCreated}>Created</Text>
-            <Text style={styles.tasksLength}>0</Text>
+            <Text style={styles.tasksLength}>{createdCount}</Text>
           </View>
 
           <View style={styles.status}>
             <Text style={styles.statusCompleted}>Completed</Text>
-            <Text style={styles.tasksLength}>0</Text>
+            <Text style={styles.tasksLength}>{checkedCount}</Text>
           </View>
         </View>
 
         <FlatList
           data={tasks}
           keyExtractor={item => item}
-          renderItem={({item}) => (
-            <Task 
+          renderItem={({ item }) => (
+            <Task
+              isChecked={taskStates[item] || false}
+              onCheck={(isChecked) => handleCheckTask(item, isChecked)}
               task={item}
-              onRemove={() => handleRemoveTask(item)}  
+              onRemove={() => handleRemoveTask(item)}
             />
           )}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={styles.emptyList}>
+              <MaterialCommunityIcons
+                name="clipboard-text-outline"
+                style={styles.emptyListIcon}
+              />
+              <Text style={styles.emptyListText}>You don't have tasks registered yet</Text>
+              <Text style={styles.emptyListSubscription}>Create tasks and organize your to-do items</Text>
+            </View>
+          }
         />
       </View>
     </>

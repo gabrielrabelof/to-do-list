@@ -12,14 +12,19 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 12
   },
-  task: {
+  taskCreated: {
     flex: 1,
     lineHeight: 24,
     color: '#F2F2F2',
     fontFamily: 'Inter_400Regular',
     padding: 12
   },
-  checkbox: {
-    borderRadius: 50, // Border radius de 50
-  },
+  taskCompleted: {
+    flex: 1,
+    lineHeight: 24,
+    color: '#808080',
+    fontFamily: 'Inter_400Regular',
+    padding: 12,
+    textDecorationLine: 'line-through'
+  }
 })
