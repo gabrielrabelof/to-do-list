@@ -9,6 +9,15 @@ import { Task } from "../../components/Task";
 export function Home() {
   const [tasks, setTasks] = useState<string[]>([])
   const [text, setText] = useState("")
+  const [isFocused, setIsFocused] = useState(false)
+
+  function handleFocus() {
+    setIsFocused(true)
+  }
+
+  function handleBlur() {
+    setIsFocused(false)
+  }
 
   function handleAddTask() {
     if (text == "") {
@@ -19,7 +28,7 @@ export function Home() {
       return Alert.alert("Repeated task", "This task has already been registered.")
     }
 
-    setTasks(prevState => [...prevState, text])
+    setTasks(prevState => [text, ...prevState])
     setText("")
   }
 
@@ -57,11 +66,13 @@ export function Home() {
       <View style={styles.content}>
         <View style={styles.form}>
           <TextInput 
-            style={styles.input}
+            style={[styles.input, {borderColor: isFocused ? '#5E60CE' : '#0D0D0D'}]}
             placeholder="Add a new task"
             placeholderTextColor="#808080"
             onChangeText={setText}
             value={text}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
           />
 
           <TouchableOpacity 
